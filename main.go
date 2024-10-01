@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/fatih/color"
@@ -38,7 +39,12 @@ type Weather struct {
 }
 
 func main() {
-	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=1a79fe38d99243d89ac92056240110&q=Rangpur&days=1&aqi=no&alerts=no")
+	q := "Rangpur"
+	if len(os.Args) >= 2 {
+		q = os.Args[1]
+	}
+
+	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=1a79fe38d99243d89ac92056240110&q=" + q + "&days=1&aqi=no&alerts=no")
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +67,7 @@ func main() {
 
 	location, current, hours := weather.Location, weather.Current, weather.Forecast.Forecastday[0].Hour
 	fmt.Printf(
-		"%s, %s: %.0fC, %s\n",
+		"%s, %s: %.0f°C, %s\n",
 		location.Name,
 		location.Country,
 		current.TempC,
@@ -76,7 +82,7 @@ func main() {
 		}
 
 		message := fmt.Sprintf(
-			"%s - %.0fC, %.0f%%, %s\n",
+			"%s - %.0f°C, %.0f%%, %s\n",
 			date.Format("15:04"),
 			hour.TempC,
 			hour.ChanceOfRain,
