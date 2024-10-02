@@ -25,3 +25,7 @@ To make the gocloudy available globally on your system, move the executable to y
 sudo mv gocloudy /usr/local/bin
 ```
 After doing this, you’ll be able to run gocloudy from anywhere by simply typing `gocloudy`
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open a pull request or submit an issue if you encounter any bug or have ideas for new features.
