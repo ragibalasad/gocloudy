@@ -20,7 +20,7 @@ Replace `<location>` with the name of the city for which you want to see the wea
 ```
 ./gocloudy Dinajpur # default is Rangpur
 ```
-To make the gocloudy available globally on your system, move the executable to your system's PATH by running:
+To make the `gocloudy` command available globally on your system, move the executable to your system's PATH by running:
 ```
 sudo mv gocloudy /usr/local/bin
 ```
