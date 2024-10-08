@@ -1,4 +1,4 @@
-module gocloudy
+module github.com/ragibalasad/gocloudy
 
 go 1.23.1
 
