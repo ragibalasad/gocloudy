@@ -19,6 +19,8 @@ type Weather struct {
 
 	Current struct {
 		TempC     float64 `json:"temp_c"`
+		WindKph   float64 `json:"wind_kph"`
+		Humidity  int64   `json:"humidity"`
 		Condition struct {
 			Text string `json:"text"`
 		} `json:"condition"`
@@ -78,10 +80,11 @@ func main() {
 	)
 
 	if wf.Detailed {
-		fmt.Println("Humidity: 60%")
-		fmt.Println("Wind Speed: 12 km/h")
+		fmt.Printf("Humidity: %d%%\n", current.Humidity)
+		fmt.Printf("Wind Speed: %.0f km/h\n", current.WindKph)
 	}
 
+	// Print hourly forecast of the remaining day
 	for _, hour := range hours {
 		date := time.Unix(hour.TimeEpoch, 0)
 
@@ -89,7 +92,7 @@ func main() {
 			continue
 		}
 
-		message := fmt.Sprintf(
+		forecast_hour := fmt.Sprintf(
 			"%s - %.0f°C, %.0f%%, %s\n",
 			date.Format("15:04"),
 			hour.TempC,
@@ -98,9 +101,9 @@ func main() {
 		)
 
 		if hour.ChanceOfRain < 40 {
-			fmt.Print(message)
+			fmt.Print(forecast_hour)
 		} else {
-			color.Red(message)
+			color.Red(forecast_hour)
 		}
 	}
 }
