@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/fatih/color"
@@ -19,6 +19,8 @@ type Weather struct {
 
 	Current struct {
 		TempC     float64 `json:"temp_c"`
+		WindKph   float64 `json:"wind_kph"`
+		Humidity  int64   `json:"humidity"`
 		Condition struct {
 			Text string `json:"text"`
 		} `json:"condition"`
@@ -39,12 +41,15 @@ type Weather struct {
 }
 
 func main() {
-	q := "Rangpur"
-	if len(os.Args) >= 2 {
-		q = os.Args[1]
+	wf := DefineFlags()
+	flag.Parse()
+
+	city := "Rangpur" // default city
+	if flag.NArg() > 0 {
+		city = flag.Arg(0) // get the first non-flag argument
 	}
 
-	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=1a79fe38d99243d89ac92056240110&q=" + q + "&days=1&aqi=no&alerts=no")
+	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=1a79fe38d99243d89ac92056240110&q=" + city + "&days=1&aqi=no&alerts=no")
 	if err != nil {
 		panic(err)
 	}
@@ -74,6 +79,12 @@ func main() {
 		current.Condition.Text,
 	)
 
+	if wf.Detailed {
+		fmt.Printf("Humidity: %d%%\n", current.Humidity)
+		fmt.Printf("Wind Speed: %.0f km/h\n", current.WindKph)
+	}
+
+	// Print hourly forecast of the remaining day
 	for _, hour := range hours {
 		date := time.Unix(hour.TimeEpoch, 0)
 
@@ -81,7 +92,7 @@ func main() {
 			continue
 		}
 
-		message := fmt.Sprintf(
+		forecast_hour := fmt.Sprintf(
 			"%s - %.0f°C, %.0f%%, %s\n",
 			date.Format("15:04"),
 			hour.TempC,
@@ -90,9 +101,9 @@ func main() {
 		)
 
 		if hour.ChanceOfRain < 40 {
-			fmt.Print(message)
+			fmt.Print(forecast_hour)
 		} else {
-			color.Red(message)
+			color.Red(forecast_hour)
 		}
 	}
 }
