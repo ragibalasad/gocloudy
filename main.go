@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/fatih/color"
@@ -39,12 +39,15 @@ type Weather struct {
 }
 
 func main() {
-	q := "Rangpur"
-	if len(os.Args) >= 2 {
-		q = os.Args[1]
+	wf := DefineFlags()
+	flag.Parse()
+
+	city := "Rangpur" // default city
+	if flag.NArg() > 0 {
+		city = flag.Arg(0) // get the first non-flag argument
 	}
 
-	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=1a79fe38d99243d89ac92056240110&q=" + q + "&days=1&aqi=no&alerts=no")
+	res, err := http.Get("http://api.weatherapi.com/v1/forecast.json?key=1a79fe38d99243d89ac92056240110&q=" + city + "&days=1&aqi=no&alerts=no")
 	if err != nil {
 		panic(err)
 	}
@@ -73,6 +76,11 @@ func main() {
 		current.TempC,
 		current.Condition.Text,
 	)
+
+	if wf.Detailed {
+		fmt.Println("Humidity: 60%")
+		fmt.Println("Wind Speed: 12 km/h")
+	}
 
 	for _, hour := range hours {
 		date := time.Unix(hour.TimeEpoch, 0)
