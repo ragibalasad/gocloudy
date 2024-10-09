@@ -1,7 +1,7 @@
 # Variables
 BINARY_NAME=gocloudy
 BUILD_DIR=bin
-SOURCE_DIR=cmd/app
+SOURCE_DIR=cmd/$(BINARY_NAME)
 MAIN_FILE=main.go
 
 # Default target
