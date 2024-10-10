@@ -11,6 +11,8 @@ import (
 	"github.com/fatih/color"
 )
 
+var version string
+
 type Weather struct {
 	Location struct {
 		Name    string `json:"name"`
@@ -43,6 +45,11 @@ type Weather struct {
 func main() {
 	wf := DefineFlags()
 	flag.Parse()
+
+	if wf.Version {
+		fmt.Printf("GoCloudy version: %s\n", version)
+		return
+	}
 
 	city := "Rangpur" // default city
 	if flag.NArg() > 0 {
