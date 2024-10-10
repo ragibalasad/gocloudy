@@ -4,7 +4,7 @@ SOURCE_DIR=cmd/$(BINARY_NAME)
 MAIN_FILE=main.go
 
 VERSION := $(shell git describe --tags --abbrev=0)
-BUILD_FLAGS := -ldflags "-X main.version=$(VERSION)"
+BUILD_FLAGS := -ldflags "-s -w -X main.version=$(VERSION)"
 
 .PHONY: all
 all: build
