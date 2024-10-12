@@ -33,6 +33,8 @@ type Weather struct {
 			Hour []struct {
 				TimeEpoch int64   `json:"time_epoch"`
 				TempC     float64 `json:"temp_c"`
+				WindKph   float64 `json:"wind_kph"`
+				Humidity  int64   `json:"humidity"`
 				Condition struct {
 					Text string `json:"text"`
 				} `json:"condition"`
@@ -100,17 +102,25 @@ func main() {
 		}
 
 		forecast_hour := fmt.Sprintf(
-			"%s - %.0f°C, %.0f%%, %s\n",
+			"%s: %.0f°C",
 			date.Format("15:04"),
 			hour.TempC,
+		)
+
+		if wf.Detailed {
+			forecast_hour += fmt.Sprintf(", %d%% Humidity, Wind Speed: %.0f km/h", hour.Humidity, hour.WindKph)
+		}
+
+		forecast_hour += fmt.Sprintf(
+			", %.0f%% Chance of Rain, %s\n",
 			hour.ChanceOfRain,
 			hour.Condition.Text,
 		)
 
-		if hour.ChanceOfRain < 40 {
-			fmt.Print(forecast_hour)
-		} else {
+		if hour.ChanceOfRain > 40 {
 			color.Red(forecast_hour)
+		} else {
+			fmt.Print(forecast_hour)
 		}
 	}
 }
