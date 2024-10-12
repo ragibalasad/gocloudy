@@ -14,8 +14,8 @@ build:
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p $(BUILD_DIR)
 
-	GOOS=linux GOARCH=amd64 go build $(BUILD_FLAGS) -trimpath -o ./$(BUILD_DIR)/$(BINARY_NAME)_$(VERSION)_linux_amd64 ./$(SOURCE_DIR)/
-	GOOS=windows GOARCH=amd64 go build $(BUILD_FLAGS) -trimpath -o ./$(BUILD_DIR)/$(BINARY_NAME)_$(VERSION)_windows_amd64.exe ./$(SOURCE_DIR)/
+	GOOS=linux GOARCH=amd64 go build $(BUILD_FLAGS) -trimpath -o ./$(BUILD_DIR)/$(BINARY_NAME) ./$(SOURCE_DIR)/
+	GOOS=windows GOARCH=amd64 go build $(BUILD_FLAGS) -trimpath -o ./$(BUILD_DIR)/$(BINARY_NAME).exe ./$(SOURCE_DIR)/
 
 	@echo "Binary built at $(BUILD_DIR)/"
 
